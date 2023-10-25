@@ -2,5 +2,5 @@
 
 # Steps
 
-1. Create React App
-2. Create Git Repository
+1. Creazione del boilerplate con Create React App
+2. Creato il Repository Git
