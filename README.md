@@ -1,4 +1,4 @@
-# VYNILLA APP STORE - Capstone Project
+# VINYLLA STORE APP - Capstone Project
 
 # Steps
 
