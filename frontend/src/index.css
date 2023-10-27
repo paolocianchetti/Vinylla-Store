@@ -17,3 +17,27 @@ header a {
   font-weight: bold;
   text-decoration: none;
 }
+
+main {
+  padding: 1rem;
+}
+
+.vinyls {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.vinyl {
+  border: 1px #404040 solid;
+  margin: 1rem;
+}
+
+.vinyl img {
+  width: 100%;
+  max-width: 400px;
+}
+
+.vinyl-info {
+  padding: 1rem;
+}
