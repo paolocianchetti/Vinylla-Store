@@ -24,3 +24,7 @@
    8. aggiunto file data.js contenente i dati di prodotti di prova
    9. creata rotta per /api/vinyls
    10. restituiti i dati dei prodotti al frontend
+6. Fetch dei Prodotti dal Backend
+   1. impostato proxy nel file package.json per collegare il frontend al backend
+   2. installato axios con npm install axios
+   3. implementati useState e useEffect hooks nella pagina Home

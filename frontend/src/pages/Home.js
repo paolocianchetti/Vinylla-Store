@@ -1,12 +1,25 @@
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import data from '../data';
+import axios from 'axios';
 
 function Home() {
+  const [vinyls, setVinyls] = useState([]);
+
+  const getData = async () => {
+    const result = await axios.get('/api/vinyls');
+    console.log('axios result: ', result);
+    setVinyls(result.data);
+  };
+
+  useEffect(() => {
+    getData();
+  }, []);
+
   return (
     <div>
       <h1>I nostri dischi in vendita</h1>
       <div className="vinyls">
-        {data.vinyls.map((vinyl) => (
+        {vinyls.map((vinyl) => (
           <div className="vinyl" key={vinyl.path}>
             <Link to={`/vinyl/${vinyl.path}`}>
               <img src={vinyl.cover} alt={vinyl.title} />
