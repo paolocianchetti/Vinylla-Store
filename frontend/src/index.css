@@ -7,19 +7,17 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-header {
-  background-color: #104da2;
-  padding: 1rem;
-}
-
-header a {
-  color: white;
-  font-weight: bold;
-  text-decoration: none;
+.app-container {
+  min-height: 100vh;
 }
 
 main {
-  padding: 1rem;
+  flex: 1;
+}
+
+.btn-primary {
+  background-color: rgb(246, 161, 56);
+  color: black;
 }
 
 .vinyls {
@@ -28,8 +26,12 @@ main {
   justify-content: center;
 }
 
+.rating span {
+  color: rgb(255, 217, 0);
+}
+
 .vinyl {
-  border: 1px #404040 solid;
+  border: rgb(64, 64, 64) 1px solid;
   margin: 1rem;
 }
 
@@ -40,4 +42,12 @@ main {
 
 .vinyl-info {
   padding: 1rem;
+}
+
+.img-large {
+  max-width: 100%;
+}
+
+.img-thumbnail {
+  height: 80px;
 }

@@ -1,14 +1,51 @@
-import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useEffect, useReducer } from 'react';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+import Product from '../components/Product';
+import Loading from '../components/Loading';
+import Message from '../components/Message';
 import axios from 'axios';
+import logger from 'use-reducer-logger';
+
+const reducer = (state, action) => {
+  switch (action.type) {
+    case 'FETCH_REQUEST':
+      return {
+        ...state,
+        loading: true,
+      };
+    case 'FETCH_SUCCESS':
+      return {
+        ...state,
+        vinyls: action.payload,
+        loading: false,
+      };
+    case 'FETCH_FAIL':
+      return {
+        ...state,
+        loading: false,
+        error: action.payload,
+      };
+    default:
+      return state;
+  }
+};
 
 function Home() {
-  const [vinyls, setVinyls] = useState([]);
+  const [{ loading, error, vinyls }, dispatch] = useReducer(logger(reducer), {
+    vinyls: [],
+    loading: true,
+    error: '',
+  });
 
   const getData = async () => {
-    const result = await axios.get('/api/vinyls');
-    console.log('axios result: ', result);
-    setVinyls(result.data);
+    dispatch({ type: 'FETCH_REQUEST' });
+    try {
+      const result = await axios.get('/api/vinyls');
+      dispatch({ type: 'FETCH_SUCCESS', payload: result.data });
+    } catch (err) {
+      dispatch({ type: 'FETCH_FAIL', payload: err.message });
+    }
   };
 
   useEffect(() => {
@@ -19,22 +56,19 @@ function Home() {
     <div>
       <h1>I nostri dischi in vendita</h1>
       <div className="vinyls">
-        {vinyls.map((vinyl) => (
-          <div className="vinyl" key={vinyl.path}>
-            <Link to={`/vinyl/${vinyl.path}`}>
-              <img src={vinyl.cover} alt={vinyl.title} />
-            </Link>
-            <div className="vinyl-info">
-              <Link to={`/vinyl/${vinyl.path}`}>
-                <p>{vinyl.title}</p>
-              </Link>
-              <p>
-                <strong>€{vinyl.price}</strong>
-              </p>
-              <button>Aggiungi al carrello</button>
-            </div>
-          </div>
-        ))}
+        {loading ? (
+          <Loading />
+        ) : error ? (
+          <Message variant="danger">{error}</Message>
+        ) : (
+          <Row>
+            {vinyls.map((vinyl) => (
+              <Col key={vinyl.path} sm={6} md={4} lg={3} className="mb-3">
+                <Product vinyl={vinyl}></Product>
+              </Col>
+            ))}
+          </Row>
+        )}
       </div>
     </div>
   );
