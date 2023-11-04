@@ -51,3 +51,25 @@ main {
 .img-thumbnail {
   height: 80px;
 }
+
+.login-container {
+  max-width: 600px;
+}
+
+.shipping-container {
+  width: 60% !important;
+}
+
+.steps > div {
+  color: rgb(160, 160, 160);
+  border-bottom: 0.2rem solid rgb(160, 160, 160);
+}
+
+.steps > div.active {
+  color: rgb(240, 128, 0);
+  border-bottom: 0.2rem solid rgb(240, 128, 0);
+}
+
+.payment-container {
+  width: 50% !important;
+}

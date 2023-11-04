@@ -78,3 +78,65 @@
 - salvati i prodotti nel carrello nel localStorage
 - creato handler per il Checkout
 - implementato 'Aggiungi al Carrello' nella Home page
+
+16. Implementato Form di Login
+
+- creato un form per il login
+- aggiunti campi per email e password
+- aggiunto un bottone di login
+
+17. Implementato MongoDB Database
+
+- creato un mongodb atlas database
+- installato mongoose con npm install mongoose
+- stabilita connessione al mongodb database nel file server.js
+
+18. Inseriti prodotti di prova nel MongoDB Database
+
+- creato uno Schema per i dischi in vinile
+- creata rotta per inserire nuovi dischi
+- creata rotta per prelevare i dati dei dischi dal database
+- usate queste rotte nel file server.js
+
+19. Creati Utenti di prova
+
+- creato uno schema per gli utenti
+- inseriti utenti di prova nel database
+- creata rotta per gli utenti
+
+20. Creata API Backend per il Login degli utenti
+
+- creata login api
+- installato jsonwebtoken con npm i jsonwebtoken
+- definita funzione per la creazione del Token
+
+21. Completata schermata di Login utente
+
+- il token viene salvato nel localStorage e nello Store
+- mostrato il nome dell'utente che ha effettuato il login nella navbar con un menu a tendina
+
+22. Implementata pagina per la spedizione del prodotto
+
+- creato un form per input dei dati di spedizione
+- i dati di spedizione vengono memorizzati nel localStorage
+- dopo l'inserimento dei dati di spedizione l'utente viene indirizzato alla pagina per procedere al pagamento
+- quando l'utente clicca sul bottone di Logout i prodotti presenti nel carrello e i dati di spedizione vengono cancellati, per consentire il login di un nuovo utente
+
+23. Creato una nuova pagina per consentire la Registrazione di un nuovo utente
+
+- creati form di input
+- creato handler che risponde alla pressione del pulsante di registrazione
+- creata rotta lato backend per la registrazione di un nuovo utente nel database remoto
+
+24. Creata nuova pagina per la scelta del metodo di pagamento
+
+- creato form di input
+- creato handler per gestire la sottoscrizione del form
+
+25. Creata pagina degli ordini
+
+- vengono mostrati i dischi nel carrello, il metodo di pagamento prescelto e i dati per la spedizione
+
+26. Implementata funzione per la conferma dell'ordine effettuato
+
+- creata una rotta lato backend per la memorizzazione dell'ordine effettuato nel database remoto

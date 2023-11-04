@@ -1,7 +1,22 @@
+import bcrypt from 'bcryptjs';
+
 const data = {
+  users: [
+    {
+      name: 'Paolo',
+      email: 'administrator@provider.com',
+      password: bcrypt.hashSync('123456'),
+      isAdmin: true,
+    },
+    {
+      name: 'Mauro',
+      email: 'maurouser@vicini.com',
+      password: bcrypt.hashSync('123456'),
+      isAdmin: false,
+    },
+  ],
   vinyls: [
     {
-      _id: '1',
       title: 'Midnights',
       artist: 'Taylor Swift',
       path: 'midnights-taylor-swift-album',
@@ -14,7 +29,6 @@ const data = {
       description: 'Republic records album',
     },
     {
-      _id: '2',
       title: 'Metallica',
       artist: 'Metallica',
       path: 'metallica-album',
@@ -27,7 +41,6 @@ const data = {
       description: 'high quality album',
     },
     {
-      _id: '3',
       title: 'Thriller',
       artist: 'Michael Jackson',
       path: 'thriller-mj-album',
@@ -40,7 +53,6 @@ const data = {
       description: 'This album contains previously unreleased material',
     },
     {
-      _id: '4',
       title: 'Innuendo',
       artist: 'Queen',
       path: 'innuendo-queen-album',
