@@ -32,4 +32,70 @@ orderRouter.post(
   })
 );
 
+orderRouter.get(
+  '/user',
+  isAuth,
+  expressAsyncHandler(async (req, res) => {
+    // estraiamo dalla tabella Order tutti gli ordini effettuati
+    // dall'utente autorizzato
+    const orders = await Order.find({
+      user: req.user._id,
+    });
+    // restituiamo il vettore degli ordini al frontend
+    res.send(orders);
+  })
+);
+
+orderRouter.get(
+  '/:id',
+  isAuth,
+  expressAsyncHandler(async (req, res) => {
+    // cerchiamo l'ordine specificato dal parametro id
+    const order = await Order.findById(req.params.id);
+    if (order) {
+      res.send(order);
+    } else {
+      res.status(404).send({
+        message: 'Ordine non trovato!',
+      });
+    }
+  })
+);
+
+orderRouter.put(
+  '/:id/pay',
+  isAuth,
+  expressAsyncHandler(async (req, res) => {
+    // cerchiamo l'ordine con id passato come parametro nel database remoto
+    const order = await Order.findById(req.params.id);
+    // se l'ordine esiste, impostiamo lo stato del suo pagamento a true
+    // e il momento in cui è stato pagato con la data corrente
+    // inoltre aggiorno i dati di pagamento dell'ordine con le informazioni
+    // ricevute da PayPal (oggetto details passato dal frontend)
+    if (order) {
+      order.isPaid = true;
+      order.paidAt = Date.now();
+      order.paymentResult = {
+        id: req.body.id,
+        status: req.body.status,
+        update_time: req.body.update_time,
+        email_address: req.body.email_address,
+      };
+
+      // salviamo i dati del pagamento dell'ordine nel database remoto
+      const updatedOrder = await order.save();
+      // restituiamo la risposta al frontend
+      res.send({
+        message: 'Ordine Pagato',
+        order: updatedOrder,
+      });
+    } else {
+      // ordine non trovato
+      res.status(404).send({
+        message: 'Ordine non trovato!',
+      });
+    }
+  })
+);
+
 export default orderRouter;

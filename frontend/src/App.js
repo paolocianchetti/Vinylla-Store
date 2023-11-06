@@ -17,6 +17,9 @@ import Register from './pages/Register';
 import Shipping from './pages/Shipping';
 import Payment from './pages/Payment';
 import Order from './pages/Order';
+import OrderDetail from './pages/OrderDetail';
+import OrderList from './pages/OrderList';
+import UserProfile from './pages/UserProfile';
 
 function App() {
   const { state, dispatch: contextDispatch } = useContext(Store);
@@ -28,11 +31,13 @@ function App() {
     contextDispatch({
       type: 'USER_LOGOUT',
     });
-    // cancelliamo l'utente, i dati di spedizione
-    // e il metodo di pagamento scelto dal localStorage
+    // cancelliamo l'utente, i dati di spedizione,
+    // il metodo di pagamento scelto dal localStorage e
+    // indirizziamo l'utente sulla pagina di login
     localStorage.removeItem('userInfo');
     localStorage.removeItem('shippingData');
     localStorage.removeItem('paymentMethod');
+    window.location.href = '/login';
   };
 
   return (
@@ -40,43 +45,46 @@ function App() {
       <div className="d-flex flex-column app-container">
         <ToastContainer position="bottom-center" limit={1} />
         <header>
-          <Navbar bg="success" variant="dark">
+          <Navbar bg="success" expand="lg" variant="dark">
             <Container>
               <LinkContainer to="/">
                 <Navbar.Brand>Vinylla Store</Navbar.Brand>
               </LinkContainer>
-              <Nav className="me-auto">
-                <Link to="/cart" className="nav-link">
-                  Carrello
-                  {cart.cartItems.length > 0 && (
-                    <Badge pill bg="danger">
-                      {cart.cartItems.reduce((a, c) => a + c.quantity, 0)}
-                    </Badge>
-                  )}
-                </Link>
-                {userInfo ? (
-                  <NavDropdown title={userInfo.name} id="basic-nav-dropdown">
-                    <LinkContainer to="/profile">
-                      <NavDropdown.Item>Profilo Utente</NavDropdown.Item>
-                    </LinkContainer>
-                    <LinkContainer to="/history">
-                      <NavDropdown.Item>Ordini</NavDropdown.Item>
-                    </LinkContainer>
-                    <NavDropdown.Divider />
-                    <Link
-                      className="dropdown-item"
-                      to="#logout"
-                      onClick={logoutHandler}
-                    >
-                      Logout
-                    </Link>
-                  </NavDropdown>
-                ) : (
-                  <Link className="nav-link" to="/login">
-                    Login
+              <Navbar.Toggle aria-controls="basic-navbar-nav" />
+              <Navbar.Collapse id="basic-navbar-nav">
+                <Nav className="me-auto w-100 justify-content-end">
+                  <Link to="/cart" className="nav-link">
+                    Carrello
+                    {cart.cartItems.length > 0 && (
+                      <Badge pill bg="danger">
+                        {cart.cartItems.reduce((a, c) => a + c.quantity, 0)}
+                      </Badge>
+                    )}
                   </Link>
-                )}
-              </Nav>
+                  {userInfo ? (
+                    <NavDropdown title={userInfo.name} id="basic-nav-dropdown">
+                      <LinkContainer to="/profile">
+                        <NavDropdown.Item>Profilo Utente</NavDropdown.Item>
+                      </LinkContainer>
+                      <LinkContainer to="/orderlist">
+                        <NavDropdown.Item>Ordini</NavDropdown.Item>
+                      </LinkContainer>
+                      <NavDropdown.Divider />
+                      <Link
+                        className="dropdown-item"
+                        to="#logout"
+                        onClick={logoutHandler}
+                      >
+                        Logout
+                      </Link>
+                    </NavDropdown>
+                  ) : (
+                    <Link className="nav-link" to="/login">
+                      Login
+                    </Link>
+                  )}
+                </Nav>
+              </Navbar.Collapse>
             </Container>
           </Navbar>
         </header>
@@ -88,9 +96,12 @@ function App() {
               <Route path="/cart" element={<Cart />} />
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
+              <Route path="/profile" element={<UserProfile />} />
               <Route path="/shipping" element={<Shipping />} />
               <Route path="/payment" element={<Payment />} />
               <Route path="/order" element={<Order />} />
+              <Route path="/order/:id" element={<OrderDetail />} />
+              <Route path="/orderlist" element={<OrderList />} />
             </Routes>
           </Container>
         </main>

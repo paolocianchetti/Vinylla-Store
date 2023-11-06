@@ -56,7 +56,8 @@ main {
   max-width: 600px;
 }
 
-.shipping-container {
+.shipping-container,
+.profile-container {
   width: 60% !important;
 }
 

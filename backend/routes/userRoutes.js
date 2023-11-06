@@ -3,6 +3,7 @@ import bcrypt from 'bcryptjs';
 import expressAsyncHandler from 'express-async-handler';
 import User from '../models/userModel.js';
 import { createToken } from '../token.js';
+import { isAuth } from '../middlewares/isAuth.js';
 
 const userRouter = express.Router();
 
@@ -53,6 +54,40 @@ userRouter.post(
       isAdmin: user.isAdmin,
       token: createToken(user),
     });
+  })
+);
+
+userRouter.put(
+  '/profile',
+  isAuth,
+  expressAsyncHandler(async (req, res) => {
+    // vediamo se l'untente esiste nel database remoto
+    const user = await User.findById(req.user._id);
+    // se esiste allora aggiorniamo i dati dell'utente
+    if (user) {
+      user.name = req.body.name || user.name;
+      user.email = req.body.email || user.email;
+      // se è stata inviata la password la criptiamo e aggiorniamo
+      if (req.body.password) {
+        user.password = bcrypt.hashSync(req.body.password, 8);
+      }
+
+      // inviamo i dati dell'utente aggiornati al database remoto
+      const updatedUser = await user.save();
+
+      // restituiamo al frontend l'oggetto dei dati aggiornati dell'utente
+      res.send({
+        _id: updatedUser._id,
+        name: updatedUser.name,
+        email: updatedUser.email,
+        isAdmin: updatedUser.isAdmin,
+        token: createToken(updatedUser),
+      });
+    } else {
+      res.status(404).send({
+        message: 'Utente non trovato!',
+      });
+    }
   })
 );
 

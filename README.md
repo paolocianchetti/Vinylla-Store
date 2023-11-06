@@ -30,7 +30,6 @@
    - implementati useState e useEffect hooks nella pagina Home
 7. Gestito lo State con il Reducer Hook
    - definita funzione reducer nella pagina Home
-   - installato "use-reducer-logger"
    - aggiornati i dati provenienti dal server
    - acquisito lo State grazie a useReducer al posto di useState
 8. Aggiunto React Bootstrap
@@ -140,3 +139,30 @@
 26. Implementata funzione per la conferma dell'ordine effettuato
 
 - creata una rotta lato backend per la memorizzazione dell'ordine effettuato nel database remoto
+
+27. Creata pagina per mostrare il dettaglio dell'ordine confermato dall'utente
+
+- creata rotta lato backend per gestire la richiesta del dettaglio dell'ordine confermato, attraverso il suo id
+- effettuata richiesta lato frontend
+- mostrate le informazioni dell'ordine in due colonne
+
+28. Implementazione pagamenti ordini con PayPal
+
+- generato Client Id PayPal
+- creata API backend per restituire il Client Id di PayPal
+- installato react-paypal-js
+- implementati { PayPalScriptProvider }, { usePayPalScriptReducer }
+- implementato handler per gestire l'approvazione del pagamento da PayPal
+- creata rotta lato backend per salvare l'ordine con i dati di pagamento ricevuti da PayPal nel database remoto
+
+29. Implementata pagina per il riepilogo degli ordini effettuati dall'utente
+
+- creata api lato backend che restituisce la lista degli ordini effettuati
+- questa api viene poi usata lato frontend per soddisfare la richiesta
+
+30. Implementata pagina del profilo dell'utente, che consente anche la modifica/aggiornamento dei dati dell'utente stesso
+
+- le informazioni dell'utente che si è loggato vengono prese dallo Store e visualizzate nel form della pagina
+- creata una rotta api lato backend per aggiornare i dati dell'utente nel database remoto
+
+31. Pubblicata la web app su un account Heroku che già avevo attivato prima
