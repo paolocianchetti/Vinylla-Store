@@ -166,3 +166,9 @@
 - creata una rotta api lato backend per aggiornare i dati dell'utente nel database remoto
 
 31. Pubblicata la web app su un account Heroku che già avevo attivato prima
+
+32. Implementata una Sidebar per effettuare la ricerca per genere musicale e un Box di ricerca nella Navbar per la ricerca dei vinili
+
+33. Creata pagina per mostrare i risultati della ricerca effettuata attraverso il Box di ricerca nella Navbar
+
+- implementata rotta api lato backend per restituire i risultati della ricerca

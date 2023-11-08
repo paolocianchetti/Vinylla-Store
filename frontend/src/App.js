@@ -1,13 +1,16 @@
-import { useContext } from 'react';
+import { useContext, useState, useEffect } from 'react';
+import axios from 'axios';
 import { BrowserRouter, Link, Routes, Route } from 'react-router-dom';
 import { Store } from './Store';
-import { ToastContainer } from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { getError } from './errors';
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import Badge from 'react-bootstrap/Badge';
 import Container from 'react-bootstrap/Container';
+import Button from 'react-bootstrap/Button';
 import { LinkContainer } from 'react-router-bootstrap';
 import Home from './pages/Home';
 import Vinyl from './pages/Vinyl';
@@ -20,6 +23,8 @@ import Order from './pages/Order';
 import OrderDetail from './pages/OrderDetail';
 import OrderList from './pages/OrderList';
 import UserProfile from './pages/UserProfile';
+import Search from './components/Search';
+import SearchResult from './pages/SearchResult';
 
 function App() {
   const { state, dispatch: contextDispatch } = useContext(Store);
@@ -40,24 +45,59 @@ function App() {
     window.location.href = '/login';
   };
 
+  // definiamo uno state per la sidebar
+  const [sidebarActive, setSidebarActive] = useState(false);
+
+  // definiamo uno state per i generi musicali
+  const [genres, setGenres] = useState([]);
+
+  const getGenres = async () => {
+    try {
+      const { data } = await axios.get(`/api/vinyls/genres`);
+      setGenres(data);
+    } catch (err) {
+      toast.error(getError(err));
+    }
+  };
+
+  useEffect(() => {
+    getGenres();
+  }, []);
+
   return (
     <BrowserRouter>
-      <div className="d-flex flex-column app-container">
+      <div
+        className={
+          sidebarActive
+            ? 'd-flex flex-column app-container contract-container'
+            : 'd-flex flex-column app-container'
+        }
+      >
         <ToastContainer position="bottom-center" limit={1} />
         <header>
           <Navbar bg="success" expand="lg" variant="dark">
             <Container>
+              <Button
+                variant="dark"
+                onClick={() => setSidebarActive(!sidebarActive)}
+              >
+                <i className="fas fa-bars"></i>
+              </Button>
               <LinkContainer to="/">
                 <Navbar.Brand>Vinylla Store</Navbar.Brand>
               </LinkContainer>
               <Navbar.Toggle aria-controls="basic-navbar-nav" />
               <Navbar.Collapse id="basic-navbar-nav">
+                <Search />
                 <Nav className="me-auto w-100 justify-content-end">
                   <Link to="/cart" className="nav-link">
                     Carrello
                     {cart.cartItems.length > 0 && (
                       <Badge pill bg="danger">
-                        {cart.cartItems.reduce((a, c) => a + c.quantity, 0)}
+                        {cart.cartItems.reduce(
+                          (acc, current) => acc + current.quantity,
+                          0
+                        )}
                       </Badge>
                     )}
                   </Link>
@@ -88,12 +128,36 @@ function App() {
             </Container>
           </Navbar>
         </header>
+        <div
+          className={
+            sidebarActive
+              ? 'd-flex flex-column justify-content-between flex-wrap sidebar-nav open-sidebar'
+              : 'd-flex flex-column justify-content-between flex-wrap sidebar-nav'
+          }
+        >
+          <Nav className="flex-column w-100 p-2 text-white">
+            <Nav.Item>
+              <strong>Genere</strong>
+            </Nav.Item>
+            {genres.map((genre) => (
+              <Nav.Item key={genre}>
+                <LinkContainer
+                  to={{ pathname: '/search', search: `?genre=${genre}` }}
+                  onClick={() => setSidebarActive(false)}
+                >
+                  <Nav.Link>{genre}</Nav.Link>
+                </LinkContainer>
+              </Nav.Item>
+            ))}
+          </Nav>
+        </div>
         <main>
           <Container className="mt-3">
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/vinyl/:path" element={<Vinyl />} />
               <Route path="/cart" element={<Cart />} />
+              <Route path="/search" element={<SearchResult />} />
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
               <Route path="/profile" element={<UserProfile />} />
