@@ -1,6 +1,7 @@
-import express, { query } from 'express';
+import express from 'express';
 import expressAsyncHandler from 'express-async-handler';
 import Vinyl from '../models/vinylModel.js';
+import { isAuth } from '../middlewares/isAuth.js';
 
 const vinylRouter = express.Router();
 
@@ -138,5 +139,77 @@ vinylRouter.get('/:id', async (req, res) => {
     res.status(404).send({ message: 'Vinile non trovato!' });
   }
 });
+
+vinylRouter.get(
+  '/:id/reviews',
+  isAuth,
+  expressAsyncHandler(async (req, res) => {
+    // prendiamo l'Id del disco dal parametro
+    const vinylId = req.params.id;
+
+    // controlliamo se il vinile esiste nel database remoto
+    const vinyl = await Vinyl.findById(vinylId);
+
+    if (vinyl) {
+      // vediamo se l'utente ha già creato una recensione per il disco selezionato
+      if (vinyl.reviews.find((review) => review.name === req.user.name)) {
+        res.status(200).send({
+          message: 'Hai già salvato una recensione per questo disco!',
+          statusCode: 200,
+        });
+      } else {
+        res.status(202).send({
+          statusCode: 202,
+        });
+      }
+    } else {
+      res.status(404).send({ message: 'Vinile non trovato!' });
+    }
+  })
+);
+
+vinylRouter.post(
+  '/:id/reviews',
+  isAuth,
+  expressAsyncHandler(async (req, res) => {
+    // prendiamo l'Id del disco dal parametro
+    const vinylId = req.params.id;
+
+    // controlliamo se il vinile specifico esiste nel database remoto
+    const vinyl = await Vinyl.findById(vinylId);
+    if (vinyl) {
+      // creaimo un oggetto review
+      const review = {
+        name: req.user.name,
+        rating: Number(req.body.rating),
+        comment: req.body.comment,
+      };
+
+      // inseriamo la recensione come ultimo elemento del vettore
+      vinyl.reviews.push(review);
+      // aggiorniamo il numero delle recensioni per il disco selezionato
+      vinyl.numReviews = vinyl.reviews.length;
+      // calcoliamo la valutazione media per il vinile selezionato
+      vinyl.rating =
+        vinyl.reviews.reduce((acc, current) => current.rating + acc, 0) /
+        vinyl.reviews.length;
+
+      // salviamo i dati aggiornati del vinile nel database remoto
+      const updatedVinyl = await vinyl.save();
+
+      // restituiamo al frontend l'oggetto data con i campi richiesti
+      res.status(201).send({
+        message: 'Recensione Salvata',
+        review: updatedVinyl.reviews[updatedVinyl.reviews.length - 1],
+        numReviews: vinyl.numReviews,
+        rating: vinyl.rating,
+      });
+    } else {
+      res.status(404).send({
+        message: 'Vinile non trovato!',
+      });
+    }
+  })
+);
 
 export default vinylRouter;

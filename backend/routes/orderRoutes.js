@@ -2,6 +2,12 @@ import express from 'express';
 import expressAsyncHandler from 'express-async-handler';
 import Order from '../models/orderModel.js';
 import { isAuth } from '../middlewares/isAuth.js';
+import { emailTemplate } from '../email.js';
+import sgMail from '@sendgrid/mail';
+import dotenv from 'dotenv';
+
+dotenv.config();
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 const orderRouter = express.Router();
 
@@ -67,7 +73,10 @@ orderRouter.put(
   isAuth,
   expressAsyncHandler(async (req, res) => {
     // cerchiamo l'ordine con id passato come parametro nel database remoto
-    const order = await Order.findById(req.params.id);
+    const order = await Order.findById(req.params.id).populate(
+      'user',
+      'email name'
+    );
     // se l'ordine esiste, impostiamo lo stato del suo pagamento a true
     // e il momento in cui è stato pagato con la data corrente
     // inoltre aggiorno i dati di pagamento dell'ordine con le informazioni
@@ -84,6 +93,24 @@ orderRouter.put(
 
       // salviamo i dati del pagamento dell'ordine nel database remoto
       const updatedOrder = await order.save();
+
+      // inviamo email al cliente attraverso il servizio sendGrid
+      const msg = {
+        to: `${order.user.name} <${order.user.email}>`,
+        from: 'paolo.cianchetti@gmail.com',
+        subject: `Nuovo ordine ${order._id}`,
+        text: 'di seguito trovi i dati del tuo ordine...',
+        html: emailTemplate(order),
+      };
+      sgMail
+        .send(msg)
+        .then(() => {
+          console.log('Email dettaglio ordine inviata al cliente...');
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+
       // restituiamo la risposta al frontend
       res.send({
         message: 'Ordine Pagato',

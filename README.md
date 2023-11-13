@@ -165,10 +165,20 @@
 - le informazioni dell'utente che si è loggato vengono prese dallo Store e visualizzate nel form della pagina
 - creata una rotta api lato backend per aggiornare i dati dell'utente nel database remoto
 
-31. Pubblicata la web app su un account Heroku che già avevo attivato prima
+31. Implementata una Sidebar per effettuare la ricerca per genere musicale e un Box di ricerca nella Navbar per la ricerca dei vinili
 
-32. Implementata una Sidebar per effettuare la ricerca per genere musicale e un Box di ricerca nella Navbar per la ricerca dei vinili
-
-33. Creata pagina per mostrare i risultati della ricerca effettuata attraverso il Box di ricerca nella Navbar
+32. Creata pagina per mostrare i risultati della ricerca effettuata attraverso il Box di ricerca nella Navbar
 
 - implementata rotta api lato backend per restituire i risultati della ricerca
+
+33. Implementato l'invio dell'ordine al cliente via email
+
+- creato account gratuito sendGrid
+- salvata sendGrid Api Key nel file .env
+- installato pacchetto @sendgrid/mail con npm
+
+34. Creata sezione per inserire le recensioni dei dischi attraverso un form
+
+- implementato form nella pagina del prodotto specifico
+- modificato schema mongoose del prodotto
+- implementate nuove rotte api nel backend
