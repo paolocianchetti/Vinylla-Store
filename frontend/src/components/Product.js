@@ -1,10 +1,10 @@
-import Card from 'react-bootstrap/Card';
-import Button from 'react-bootstrap/Button';
-import { Link } from 'react-router-dom';
-import Rating from './Rating';
-import axios from 'axios';
 import { useState, useContext } from 'react';
 import { Store } from '../Store';
+import { Link } from 'react-router-dom';
+import axios from 'axios';
+import Card from 'react-bootstrap/Card';
+import Button from 'react-bootstrap/Button';
+import Rating from './Rating';
 
 function Product(props) {
   const { vinyl } = props;

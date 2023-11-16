@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useReducer } from 'react';
 import axios from 'axios';
+import detailOrderReducer from '../reducers/detailOrderReducer';
 import { PayPalButtons, usePayPalScriptReducer } from '@paypal/react-paypal-js';
 import { useNavigate, useParams, Link } from 'react-router-dom';
 import { Store } from '../Store';
@@ -12,54 +13,6 @@ import Card from 'react-bootstrap/Card';
 import Loading from '../components/Loading';
 import Message from '../components/Message';
 
-function reducer(state, action) {
-  switch (action.type) {
-    case 'FETCH_REQUEST':
-      return {
-        ...state,
-        loading: true,
-        error: '',
-      };
-    case 'FETCH_SUCCESS':
-      return {
-        ...state,
-        loading: false,
-        order: action.payload,
-        error: '',
-      };
-    case 'FETCH_FAIL':
-      return {
-        ...state,
-        loading: false,
-        error: action.payload,
-      };
-    case 'PAY_REQUEST':
-      return {
-        ...state,
-        loadingPay: true,
-      };
-    case 'PAY_SUCCESS':
-      return {
-        ...state,
-        loadingPay: false,
-        successPay: true,
-      };
-    case 'PAY_FAIL':
-      return {
-        ...state,
-        loadingPay: false,
-      };
-    case 'PAY_RESET':
-      return {
-        ...state,
-        loadingPay: false,
-        successPay: false,
-      };
-    default:
-      return state;
-  }
-}
-
 export default function OrderDetail() {
   const { state } = useContext(Store);
   // prendo le informazioni sull'utente dallo state nello Store
@@ -71,7 +24,7 @@ export default function OrderDetail() {
   const navigate = useNavigate();
 
   const [{ loading, error, order, loadingPay, successPay }, dispatch] =
-    useReducer(reducer, {
+    useReducer(detailOrderReducer, {
       loading: true,
       order: {},
       error: '',
@@ -234,7 +187,7 @@ export default function OrderDetail() {
           </Card>
           <Card className="mb-3">
             <Card.Body>
-              <Card.Title>Vinili</Card.Title>
+              <Card.Title>Prodotti</Card.Title>
               <ListGroup variant="flush">
                 {order.orderItems.map((item) => (
                   <ListGroup.Item key={item._id}>
@@ -250,7 +203,7 @@ export default function OrderDetail() {
                       <Col md={3}>
                         <span>{item.quantity}</span>
                       </Col>
-                      <Col md={3}>${item.price}</Col>
+                      <Col md={3}>€ {item.price}</Col>
                     </Row>
                   </ListGroup.Item>
                 ))}
@@ -265,7 +218,7 @@ export default function OrderDetail() {
               <ListGroup variant="flush">
                 <ListGroup.Item>
                   <Row>
-                    <Col>Vinili</Col>
+                    <Col>Prodotti</Col>
                     <Col>€ {order.itemsPrice.toFixed(2)}</Col>
                   </Row>
                 </ListGroup.Item>

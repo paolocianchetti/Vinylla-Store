@@ -21,7 +21,6 @@ vinylRouter.get(
     const pageSize = query.pageSize || PAGE_SIZE;
     const page = query.page || 1;
     const genre = query.genre || '';
-    const artist = query.artist || '';
     const price = query.price || '';
     const rating = query.rating || '';
     const order = query.order || '';

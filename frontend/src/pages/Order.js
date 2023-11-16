@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useReducer } from 'react';
 import Axios from 'axios';
+import orderReducer from '../reducers/orderReducer';
 import { Store } from '../Store';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -12,32 +13,10 @@ import ListGroup from 'react-bootstrap/ListGroup';
 import Steps from '../components/Steps';
 import Loading from '../components/Loading';
 
-const reducer = (state, action) => {
-  switch (action.type) {
-    case 'ORDER_REQUEST':
-      return {
-        ...state,
-        loading: true,
-      };
-    case 'ORDER_SUCCESS':
-      return {
-        ...state,
-        loading: false,
-      };
-    case 'ORDER_FAIL':
-      return {
-        ...state,
-        loading: false,
-      };
-    default:
-      return state;
-  }
-};
-
 export default function Order() {
   const navigate = useNavigate();
 
-  const [{ loading }, dispatch] = useReducer(reducer, {
+  const [{ loading }, dispatch] = useReducer(orderReducer, {
     loading: false,
   });
 
@@ -148,7 +127,7 @@ export default function Order() {
           </Card>
           <Card className="mb-3">
             <Card.Body>
-              <Card.Title>Dischi nel carrello</Card.Title>
+              <Card.Title>Prodotti nel carrello</Card.Title>
               <ListGroup variant="flush">
                 {cart.cartItems.map((item) => (
                   <ListGroup.Item key={item._id}>
@@ -180,7 +159,7 @@ export default function Order() {
               <ListGroup variant="flush">
                 <ListGroup.Item>
                   <Row>
-                    <Col>Dischi</Col>
+                    <Col>Imponibile</Col>
                     <Col>€ {cart.itemsPrice.toFixed(2)}</Col>
                   </Row>
                 </ListGroup.Item>

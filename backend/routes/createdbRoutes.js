@@ -3,9 +3,9 @@ import Vinyl from '../models/vinylModel.js';
 import User from '../models/userModel.js';
 import data from '../data.js';
 
-const inputRouter = express.Router();
+const createdbRouter = express.Router();
 
-inputRouter.get('/', async (req, res) => {
+createdbRouter.get('/', async (req, res) => {
   // cancelliamo i prodotti già presenti nel database
   await Vinyl.deleteMany({});
   // creaimo il database con i prodotti presenti in data.js
@@ -20,4 +20,4 @@ inputRouter.get('/', async (req, res) => {
   res.send({ createdVinyls, createdUsers });
 });
 
-export default inputRouter;
+export default createdbRouter;

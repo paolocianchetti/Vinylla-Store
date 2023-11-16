@@ -1,37 +1,14 @@
 import { useEffect, useReducer } from 'react';
 import axios from 'axios';
+import homeReducer from '../reducers/homeReducer';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Product from '../components/Product';
 import Loading from '../components/Loading';
 import Message from '../components/Message';
 
-const reducer = (state, action) => {
-  switch (action.type) {
-    case 'FETCH_REQUEST':
-      return {
-        ...state,
-        loading: true,
-      };
-    case 'FETCH_SUCCESS':
-      return {
-        ...state,
-        vinyls: action.payload,
-        loading: false,
-      };
-    case 'FETCH_FAIL':
-      return {
-        ...state,
-        loading: false,
-        error: action.payload,
-      };
-    default:
-      return state;
-  }
-};
-
 function Home() {
-  const [{ loading, error, vinyls }, dispatch] = useReducer(reducer, {
+  const [{ loading, error, vinyls }, dispatch] = useReducer(homeReducer, {
     vinyls: [],
     loading: true,
     error: '',

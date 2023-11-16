@@ -1,12 +1,12 @@
 import { useState, useContext, useEffect } from 'react';
 import { useLocation, useNavigate, Link } from 'react-router-dom';
+import Axios from 'axios';
 import { Store } from '../Store';
 import { toast } from 'react-toastify';
-import Axios from 'axios';
+import { getError } from '../errors';
 import Container from 'react-bootstrap/Container';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
-import { getError } from '../errors';
 
 export default function Register() {
   const navigate = useNavigate();

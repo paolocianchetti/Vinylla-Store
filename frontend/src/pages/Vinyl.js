@@ -1,6 +1,10 @@
 import { useContext, useEffect, useReducer, useRef, useState } from 'react';
 import axios from 'axios';
+import vinylReducer from '../reducers/vinylReducer';
+import { Store } from '../Store';
 import { Link, useNavigate, useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import { getError } from '../errors';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Card from 'react-bootstrap/Card';
@@ -12,53 +16,6 @@ import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import Rating from '../components/Rating';
 import Loading from '../components/Loading';
 import Message from '../components/Message';
-import { toast } from 'react-toastify';
-import { getError } from '../errors';
-import { Store } from '../Store';
-
-const reducer = (state, action) => {
-  switch (action.type) {
-    case 'FETCH_REQUEST':
-      return {
-        ...state,
-        loading: true,
-      };
-    case 'FETCH_SUCCESS':
-      return {
-        ...state,
-        vinyl: action.payload,
-        loading: false,
-      };
-    case 'FETCH_FAIL':
-      return {
-        ...state,
-        loading: false,
-        error: action.payload,
-      };
-    case 'SAVE_REVIEW_REQUEST':
-      return {
-        ...state,
-        loadingComments: true,
-      };
-    case 'SAVE_REVIEW_SUCCESS':
-      return {
-        ...state,
-        loadingComments: false,
-      };
-    case 'SAVE_REVIEW_FAIL':
-      return {
-        ...state,
-        loadingComments: false,
-      };
-    case 'UPDATE_VINYL':
-      return {
-        ...state,
-        vinyl: action.payload,
-      };
-    default:
-      return state;
-  }
-};
 
 function Vinyl() {
   let reviewsRef = useRef();
@@ -71,7 +28,7 @@ function Vinyl() {
   const { path } = params;
 
   const [{ loading, error, vinyl, loadingComments }, dispatch] = useReducer(
-    reducer,
+    vinylReducer,
     {
       vinyl: {},
       loading: true,

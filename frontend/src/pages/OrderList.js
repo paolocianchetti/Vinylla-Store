@@ -1,36 +1,12 @@
 import React, { useContext, useEffect, useReducer } from 'react';
 import axios from 'axios';
+import orderListReducer from '../reducers/orderListReducer';
 import { useNavigate } from 'react-router-dom';
 import { Store } from '../Store';
 import { getError } from '../errors';
 import Button from 'react-bootstrap/Button';
 import Loading from '../components/Loading';
 import Message from '../components/Message';
-
-// definiamo il reducer
-const reducer = (state, action) => {
-  switch (action.type) {
-    case 'FETCH_REQUEST':
-      return {
-        ...state,
-        loading: true,
-      };
-    case 'FETCH_SUCCESS':
-      return {
-        ...state,
-        loading: false,
-        orders: action.payload,
-      };
-    case 'FETCH_FAIL':
-      return {
-        ...state,
-        loading: false,
-        error: action.payload,
-      };
-    default:
-      return state;
-  }
-};
 
 export default function OrderList() {
   const navigate = useNavigate();
@@ -39,8 +15,9 @@ export default function OrderList() {
   // prendiamo le informazioni dell'utente dallo state
   const { userInfo } = state;
 
-  const [{ loading, error, orders }, dispatch] = useReducer(reducer, {
+  const [{ loading, error, orders }, dispatch] = useReducer(orderListReducer, {
     loading: true,
+    orders: [],
     error: '',
   });
 

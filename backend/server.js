@@ -2,7 +2,9 @@ import express from 'express';
 import path from 'path';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
-import inputRouter from './routes/inputRoutes.js';
+import cors from 'cors';
+import { logger } from './middlewares/logger.js';
+import createdbRouter from './routes/createdbRoutes.js';
 import vinylRouter from './routes/vinylRoutes.js';
 import userRouter from './routes/userRoutes.js';
 import orderRouter from './routes/orderRoutes.js';
@@ -20,16 +22,22 @@ mongoose
 
 const app = express();
 
+// middleware cors
+app.use(cors());
+
 // express middlewares
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// middleware logger
+app.use(logger);
 
 app.get('/api/keys/paypal', (req, res) => {
   res.send(process.env.PAYPAL_CLIENT_ID || 'sb');
 });
 
 // routes
-app.use('/api/input', inputRouter);
+app.use('/api/createdb', createdbRouter);
 app.use('/api/vinyls', vinylRouter);
 app.use('/api/users', userRouter);
 app.use('/api/orders', orderRouter);

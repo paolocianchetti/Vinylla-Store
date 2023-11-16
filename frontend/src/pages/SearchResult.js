@@ -1,5 +1,6 @@
 import React, { useEffect, useReducer, useState } from 'react';
 import axios from 'axios';
+import searchResultReducer from '../reducers/searchResultReducer';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import LinkContainer from 'react-router-bootstrap/LinkContainer';
 import { toast } from 'react-toastify';
@@ -11,34 +12,6 @@ import Rating from '../components/Rating';
 import Loading from '../components/Loading';
 import Message from '../components/Message';
 import Product from '../components/Product';
-
-// definiamo un reducer
-const reducer = (state, action) => {
-  switch (action.type) {
-    case 'FETCH_REQUEST':
-      return {
-        ...state,
-        loading: true,
-      };
-    case 'FETCH_SUCCESS':
-      return {
-        ...state,
-        loading: false,
-        vinyls: action.payload.vinyls,
-        page: action.payload.page,
-        pages: action.payload.pages,
-        numVinyls: action.payload.numVinyls,
-      };
-    case 'FETCH_FAIL':
-      return {
-        ...state,
-        loading: false,
-        error: action.payload,
-      };
-    default:
-      return state;
-  }
-};
 
 // definiamo il vettore dei prezzi
 const prices = [
@@ -92,7 +65,7 @@ export default function SearchResult() {
   const page = parameters.get('page') || 1;
 
   const [{ loading, error, vinyls, pages, numVinyls }, dispatch] = useReducer(
-    reducer,
+    searchResultReducer,
     {
       loading: false,
       error: '',

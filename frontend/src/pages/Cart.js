@@ -1,13 +1,13 @@
 import { useContext } from 'react';
 import { Store } from '../Store';
+import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Message from '../components/Message';
 import ListGroup from 'react-bootstrap/ListGroup';
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
-import { Link, useNavigate } from 'react-router-dom';
-import axios from 'axios';
 
 export default function Cart() {
   const navigate = useNavigate();
@@ -124,7 +124,7 @@ export default function Cart() {
                       onClick={checkoutHandler}
                       disabled={cartItems.length === 0}
                     >
-                      Procedi al Checkout
+                      Procedi all'acquisto
                     </Button>
                   </div>
                 </ListGroup.Item>

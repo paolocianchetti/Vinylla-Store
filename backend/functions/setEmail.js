@@ -1,4 +1,4 @@
-export const emailTemplate = (order) => {
+export const createTemplate = (order) => {
   return `<h1>Grazie per aver concluso affari con noi</h1>
     <p>
     Ciao ${order.user.name},

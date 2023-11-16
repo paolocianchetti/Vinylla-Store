@@ -2,7 +2,7 @@ import express from 'express';
 import expressAsyncHandler from 'express-async-handler';
 import Order from '../models/orderModel.js';
 import { isAuth } from '../middlewares/isAuth.js';
-import { emailTemplate } from '../email.js';
+import { createTemplate } from '../functions/setEmail.js';
 import sgMail from '@sendgrid/mail';
 import dotenv from 'dotenv';
 
@@ -100,7 +100,7 @@ orderRouter.put(
         from: 'paolo.cianchetti@gmail.com',
         subject: `Nuovo ordine ${order._id}`,
         text: 'di seguito trovi i dati del tuo ordine...',
-        html: emailTemplate(order),
+        html: createTemplate(order),
       };
       sgMail
         .send(msg)
