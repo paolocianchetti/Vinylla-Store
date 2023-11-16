@@ -67,6 +67,8 @@
 
 36. Creato database dei dischi in vinile suddivisi per genere musicale e una sezione dedicata agli accessori
 
-37. Effettuato il deploy dell'applicazione su Heroku all'indirizzo:
+37. Eseguito comando npm run build nella cartella radice del progetto
+
+38. Effettuato il deploy dell'applicazione su Heroku all'indirizzo:
 
 - https://vinylla-store-1be29974c0ea.herokuapp.com
